@@ -36,6 +36,15 @@ These are cited by [`DOCUMENTATION.md`](../../DOCUMENTATION.md), and a new claim
 - Chatlatanagulchai et al. 2026, *Agent READMEs* — [10.1145/3840295](https://doi.org/10.1145/3840295)
 - Gloaguen et al. 2026, *Evaluating AGENTS.md* — [arXiv 2602.11988](https://arxiv.org/abs/2602.11988)
 
+## Queued, not started
+
+Questions someone has asked for and nobody has begun. Moving one out of here means writing its document and linking it above.
+
+- **Can the crates' public APIs be made more standard, so they work well together?** Queued 2026-11-02 by the owner; not started, and deliberately not begun while the project-command trust work (`bevy_grimoire`, branch `security/project-command-trust`) is in flight.
+  - **What it would cover:** across the 14 crates, the plugin and system-set names, the settings types and their `serde` features, error types and refusal wording, how a seed is passed, feature-flag names, what each re-exports (the style guide says flat re-exports and no prelude), and how each is exposed to the editor and to an agent.
+  - **Why it matters:** the Cauldron configures each crate through that crate's own serde settings, and a Python or other script layer, if one is ever built, would expose the same types (see [`2026-11-02-python-scripting.md`](2026-11-02-python-scripting.md) once it is merged). Inconsistent APIs mean per-crate special cases in both.
+  - **First step when it starts:** an inventory table generated from each crate's `lib.rs` and `Cargo.toml` (measured, with the command), then prior art (the Rust API Guidelines and Bevy's own plugin conventions), then a proposal as a decision record. Breaking a published crate's API is a cost to name, as with the engine-free naming question below.
+
 ## Already open, and needing a document here
 
 Two questions the family currently answers by living with an inconsistency. Each deserves a file:

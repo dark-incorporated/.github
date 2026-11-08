@@ -19,19 +19,29 @@ usage() {
     exit 64
 }
 
-# Every git directory up to depth 3 under $HOME, pruning caches and build output.
+# Every git directory up to depth 3 under $HOME, pruning caches, mounts and build output.
 repos() {
     find "$HOME" -maxdepth 4 \
-        \( -name Library -o -name target -o -name node_modules -o -name .cache -o -name .cargo -o -name .rustup -o -name .Trash \) -prune \
+        \( -name Library -o -name target -o -name node_modules -o -name .cache -o -name .cargo -o -name .rustup \
+        -o -name .Trash -o -name .local -o -name .npm -o -name mnt -o -name gh-runners -o -name .omp -o -name Dropbox \) -prune \
         -o -name .git -print 2>/dev/null |
         while read -r g; do dirname "$g"; done
+}
+
+# Size of a working tree in KiB, leaving out cargo target directories.
+size_kb() {
+    if du --version >/dev/null 2>&1; then
+        du -sk --exclude=target "$1" 2>/dev/null | awk '{print $1}'
+    else
+        du -sk -I target "$1" 2>/dev/null | awk '{print $1}'
+    fi
 }
 
 row() {
     local p="$1" remote branch ab ahead behind dirty stashes wts last size
     remote="$(git -C "$p" config --get remote.origin.url 2>/dev/null)" || return 0
     echo "$remote" | grep -Eq "$MATCH" || return 0
-    git -C "$p" fetch -q 2>/dev/null
+    GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=10" git -C "$p" fetch -q 2>/dev/null
     branch="$(git -C "$p" rev-parse --abbrev-ref HEAD 2>/dev/null)"
     ab="$(git -C "$p" rev-list --left-right --count '@{u}...HEAD' 2>/dev/null)"
     if [ -n "$ab" ]; then
@@ -45,7 +55,7 @@ row() {
     stashes="$(git -C "$p" stash list 2>/dev/null | wc -l | tr -d ' ')"
     wts="$(git -C "$p" worktree list --porcelain 2>/dev/null | grep -c '^worktree ')"
     last="$(git -C "$p" log -1 --format=%cI 2>/dev/null)"
-    size="$(du -sk "$p" 2>/dev/null | awk '{print $1}')"
+    size="$(size_kb "$p")"
     printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
         "$HOST" "$p" "$remote" "$branch" "$ahead" "$behind" "$dirty" "$stashes" "$wts" "$last" "$size"
 }

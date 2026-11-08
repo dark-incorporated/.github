@@ -1,11 +1,22 @@
 # Org art
 
-The bevy-coven avatar and banner: pixel art with dark magic and 80s airbrushed custom-van murals as its motifs. **The current ones (2026-11-01) come from the Retro Diffusion cloud API, RD Pro** (see "Round 4" below). The first set was made on big with the local Retro Diffusion checkpoints (`/mnt/codex_fs/weights/RetroDiffusion*Model.safetensors`, SD 1.5), through the pipeline from Sanctuary's icon work (decision 0057); it is kept as `avatar-v1-local.png` and `banner-v1-local.png`.
+The Dark Inc. avatar and banner: technomancer pixel art, a gritty 1980s sci-fi film poster with amber and green phosphor, neon magenta, rain and industrial night as its motifs. **The current ones (2026-11-08) come from the Retro Diffusion cloud API, RD Pro** (see "Round 5" below). The Bevy Coven art they replace (rounds 1 to 4) is kept in `coven/`.
 
-- `avatar.png` (512×512) and `avatar-1024.png`: the current avatar, `av_default-2` of round 4: a raven with both wings spread, perched on a branch before a pale full moon with an orange and purple ring, native 256×256 at 2× and 4× nearest-neighbour. `banner.png` (1024×512, native 256×128 at 4×): the current banner, `bn_fantasy-0`: a raven flying across a yellow full moon over a town of black rooftops and a clock tower, with bats and lightning. `../profile/banner.png` is a copy of the banner.
-- `rd_api.py`: the Retro Diffusion v2 client used for round 4 (`python3 rd_api.py rd-jobs-round1.json OUTDIR [--cost-only]`). It reads the key from `~/.config/retrodiffusion/api_key` and never takes it from an argument. `rd-jobs-round1.json` holds the five jobs (seeds and prompts are in it); `avatar-sheet-rd.png` and `banner-sheet-rd.png` show every candidate.
-- `coven_art.py`: the local generator for round 1 to 3. Its docstring has the job schema.
+- `avatar.png` (512×512) and `avatar-1024.png`: the current avatar, `avatar-3` of round 5: a hooded technomancer, face lit from below by a green phosphor CRT, one amber cybernetic eye, orange and magenta rim light in the rain, native 256×256 at 2× and 4× nearest-neighbour. `banner.png` (1024×512, native 256×128 at 4×): the current banner, `banner-3`: a dark factory at night from the wet street, smokestacks, one amber-lit window, a giant robotic arm against a neon-magenta sky. `../profile/banner.png` is a copy of the banner.
+- `rd_api.py`: the Retro Diffusion v2 client (`python3 rd_api.py JOBS.json OUTDIR [--cost-only]`). It reads the key from `~/.config/retrodiffusion/api_key` and never takes it from an argument. `rd-jobs-dark-inc.json` holds round 5's four jobs (avatar, banner, the editor's app icon and its splash); `rd-jobs-round1.json` holds round 4's. `round5-sheet-*.png` show round 5's candidates.
+- `dark_art.py`: the local generator for rounds 1 to 3. Its docstring has the job schema.
 - `avatar.json`, `banner.json`, `banner-round2.json`, `banner-round3.json`: the local jobs that were run. `avatar-sheet.png`, `banner-sheet-round1.png`, `banner-sheet-round2.png`, `banner-sheet-round3.png` show their candidates. `banner-alt-wizard_storm-0.png` is the local runner-up banner.
+
+## Round 5: Dark Inc. (2026-11-08)
+
+RD Pro (`rd_pro__default`, 256 px, four candidates a job, 16 images for $2.88), every prompt ending ", gritty 1980s sci-fi film poster, pixel art, no text". Run on mac_air, which holds the key: `python3 rd_api.py rd-jobs-dark-inc.json OUT --cost-only`, then without `--cost-only`. The icon goes to `bevy_dark_factory`'s `crates/bevy_dark_factory/macos/icon-256.png` (and `DarkFactory.icns` through `tools/release/macos/make_icns.py`), the splash to `crates/bevy_dark_factory/assets/ui/splash.png` (256×80). The owner picked each winner from contact sheets; the scores used **d** = the motif: amber or green phosphor, neon magenta, rain, industrial night.
+
+|Job|Seeds|0|1|2|3|Winner|
+|---|---|---|---|---|---|---|
+|avatar|9101-9104|8|9|8|**10**|`avatar-3`: CRT under the face, amber eye, rim light, rain; 0 has no CRT|
+|banner|9201-9204|8|8|8|**10**|`banner-3`: magenta sky, arm, one amber window, clean edges; 1 has an orange edge artifact|
+|icon|9301-9304|9|**10**|7|9|`icon-1`: the clearest silhouette at small sizes|
+|splash|9401-9404|8|**10**|7|9|`splash-1`: arm against magenta, amber window, readable at 256×80|
 
 ## Round 4: the Retro Diffusion cloud API (2026-11-01)
 
@@ -15,11 +26,11 @@ The first avatar chosen, `av_ref-0` (drawn from the v1 avatar as a `reference_im
 
 ## Rerun
 
-Copy `coven_art.py` and the job file to `big:~/coven-art/`, then:
+Copy `dark_art.py` and the job file to `big:~/dark-art/`, then:
 
 ```sh
-ssh big "bash -lc 'gpu-tenant run 3d --who bevy-coven-art@big --wait --mem 16G --note \"bevy-coven org art\" -- ~/sanctuary-icons/.venv/bin/python ~/coven-art/coven_art.py --jobs ~/coven-art/avatar.json --out ~/coven-art/runs/avatar-1'"
-ssh big "bash -lc 'gpu-tenant run 3d --who bevy-coven-art@big --wait --mem 16G --note \"bevy-coven org art\" -- ~/sanctuary-icons/.venv/bin/python ~/coven-art/coven_art.py --jobs ~/coven-art/banner-round3.json --out ~/coven-art/runs/banner-round3-3'"
+ssh big "bash -lc 'gpu-tenant run 3d --who dark-incorporated-art@big --wait --mem 16G --note \"dark-incorporated org art\" -- ~/sanctuary-icons/.venv/bin/python ~/dark-art/dark_art.py --jobs ~/dark-art/avatar.json --out ~/dark-art/runs/avatar-1'"
+ssh big "bash -lc 'gpu-tenant run 3d --who dark-incorporated-art@big --wait --mem 16G --note \"dark-incorporated org art\" -- ~/sanctuary-icons/.venv/bin/python ~/dark-art/dark_art.py --jobs ~/dark-art/banner-round3.json --out ~/dark-art/runs/banner-round3-3'"
 ```
 
 The avatar winner is `runs/avatar-1/candidates/raven_grimoire-1.png` (seed 1002); the banner winner is `runs/banner-round3-3/candidates/raven_moon-3.png` (seed 9204). Generation is seeded, so the same checkpoint, diffusers version and GPU give the same image.

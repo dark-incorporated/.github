@@ -1,0 +1,38 @@
+[
+ {
+  "name": "avatar",
+  "prompt": "a hooded technomancer, face lit from below by a green phosphor CRT, one glowing amber cybernetic eye, rain, sodium-orange and neon-magenta rim light, bold clean silhouette, centered, black background, gritty 1980s sci-fi film poster, pixel art, no text",
+  "width": 256,
+  "height": 256,
+  "seed": 9101,
+  "prompt_style": "rd_pro__default",
+  "num_images": 4
+ },
+ {
+  "name": "banner",
+  "prompt": "a vast dark factory at night seen from the wet street, smokestacks and steam, rows of dark windows with one amber-lit window, a giant robotic arm silhouetted against a neon-magenta sky, sodium lights reflected in rain, wide landscape, gritty 1980s sci-fi film poster, pixel art, no text",
+  "width": 256,
+  "height": 128,
+  "seed": 9201,
+  "prompt_style": "rd_pro__default",
+  "num_images": 4
+ },
+ {
+  "name": "icon",
+  "prompt": "a heavy industrial robotic arm holding a glowing amber wireframe blueprint cube, green phosphor glow, bold clean silhouette, centered, black background, gritty 1980s sci-fi film poster, pixel art, no text",
+  "width": 256,
+  "height": 256,
+  "seed": 9301,
+  "prompt_style": "rd_pro__default",
+  "num_images": 4
+ },
+ {
+  "name": "splash",
+  "prompt": "a vast dark factory at night seen from the wet street, smokestacks and steam, rows of dark windows with one amber-lit window, a giant robotic arm silhouetted against a neon-magenta sky, sodium lights reflected in rain, wide landscape, gritty 1980s sci-fi film poster, pixel art, no text",
+  "width": 256,
+  "height": 80,
+  "seed": 9401,
+  "prompt_style": "rd_pro__default",
+  "num_images": 4
+ }
+]

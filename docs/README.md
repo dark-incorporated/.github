@@ -1,16 +1,17 @@
-# Documentation in the Bevy Coven
+# Documentation in Dark Inc.
 
-Everything that spans more than one repository lives here, in [`bevy-coven/.github`](https://github.com/bevy-coven/.github). A crate's own `docs/` is for its users; this folder is for the people and agents building and maintaining the Coven.
+Everything that spans more than one repository lives here, in [`dark-incorporated/.github`](https://github.com/dark-incorporated/.github). A crate's own `docs/` is for its users; this folder is for the people and agents building and maintaining Dark Inc.
 
 ## Where a document goes
 
 | The question it answers | Where it lives |
 |---|---|
-| What the Coven is, where it is going | [`../VISION.md`](../VISION.md) |
+| What Dark Inc. is, where it is going | [`../VISION.md`](../VISION.md) |
 | How the crates fit together, and what may depend on what | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
 | How we write Rust, and how a crate is laid out | [`STYLE.md`](STYLE.md) |
 | How every crate is documented (README, GIFs, `docs/`) | [`../DOCUMENTATION.md`](../DOCUMENTATION.md) |
 | How to contribute, file issues, request a consumer change | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
+| Where repositories and worktrees live on a machine | [`WORKSPACE.md`](WORKSPACE.md) |
 | Research, measurements and decisions behind a design | [`research/`](research/) |
 | One crate's API and its user guide | that crate's `docs/guide/`, published to the book |
 
@@ -20,8 +21,8 @@ Everything that spans more than one repository lives here, in [`bevy-coven/.gith
 
 - **Do not hard-wrap markdown** (every `AGENTS.md` in the family). One sentence per line, however long.
 - **Numbers are measured, and the measurement is named.** A claim about size, speed or coverage says where the number came from — a test, a `cargo` command, a `bench`, a cited paper — the way [`research/`](research/) does.
-- **Say when you are reasoning rather than reporting.** `bevy_grimoire/docs/PROJECT.md` is the model: it states which parts are measured and which are judgement.
-- **Nothing is published from here by accident.** This folder is not part of the book (`bevy-coven.github.io`). If a page should be readable by someone using the crates, it belongs in the book instead, and this folder links it.
+- **Say when you are reasoning rather than reporting.** `bevy_dark_factory/docs/PROJECT.md` is the model: it states which parts are measured and which are judgement.
+- **Nothing is published from here by accident.** This folder is not part of the book (`dark-incorporated.github.io`). If a page should be readable by someone using the crates, it belongs in the book instead, and this folder links it.
 
 ## Adding a document
 

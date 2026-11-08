@@ -1,6 +1,6 @@
 # Python as the Coven's scripting language
 
-Written 2026-11-02, against `bevy-coven/.github` at `ccf4081`. **Status: shelved, not rejected.** No concrete need for Python scripting exists today (see "Why this is shelved"), so nothing was decided and nothing was built. This note records what was learned so it can be picked up when a need appears. The harness that produced every number is in [`2026-11-02-python-scripting-spike/`](2026-11-02-python-scripting-spike/).
+Written 2026-11-02, against `dark-incorporated/.github` at `ccf4081`. **Status: shelved, not rejected.** No concrete need for Python scripting exists today (see "Why this is shelved"), so nothing was decided and nothing was built. This note records what was learned so it can be picked up when a need appears. The harness that produced every number is in [`2026-11-02-python-scripting-spike/`](2026-11-02-python-scripting-spike/).
 
 ## The question
 

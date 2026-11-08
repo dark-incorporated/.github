@@ -1,10 +1,10 @@
-"""Generate pixel-art candidates for the bevy-coven org avatar and banner (runs on big).
+"""Generate pixel-art candidates for the dark-incorporated org avatar and banner (runs on big).
 
 Uses the local Retro Diffusion checkpoints in /mnt/codex_fs/weights through the pipeline from
 Sanctuary's icon work (~/sanctuary-icons/rd_generate.py, read-only). Run it under the GPU lease:
 
-    gpu-tenant run 3d --who bevy-coven-art@big --wait --mem 16G --note "bevy-coven org art" -- \
-        ~/sanctuary-icons/.venv/bin/python ~/coven-art/coven_art.py --jobs JOBS.json --out DIR
+    gpu-tenant run 3d --who dark-incorporated-art@big --wait --mem 16G --note "dark-incorporated org art" -- \
+        ~/sanctuary-icons/.venv/bin/python ~/dark-art/dark_art.py --jobs JOBS.json --out DIR
 
 JOBS.json: {"model", "width_px", "height_px", "steps", "guidance", "expected_factor",
 "palette_colors", "out_scale", "prompt", "negative", "seeds_per_item",

@@ -1,6 +1,8 @@
-# Contributing to a Bevy Coven crate
+# Contributing to a Dark Inc. crate
 
-This file applies to every repository in [bevy-coven](https://github.com/bevy-coven) that has no `CONTRIBUTING.md` of its own.
+This file applies to every repository in [dark-incorporated](https://github.com/dark-incorporated) that has no `CONTRIBUTING.md` of its own.
+
+Set up a machine first: one clone per repository at `~/dark-incorporated/<repo>`, and every change in a worktree, as [`docs/WORKSPACE.md`](docs/WORKSPACE.md) says.
 
 ## Issues
 

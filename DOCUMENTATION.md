@@ -1,6 +1,6 @@
-# How every Bevy Coven crate is documented
+# How every Dark Inc. crate is documented
 
-This is the one guide for the README, the `docs/` folder and the media of every repository in [bevy-coven](https://github.com/bevy-coven). Each repository's `AGENTS.md` or `CLAUDE.md` links here instead of copying it.
+This is the one guide for the README, the `docs/` folder and the media of every repository in [dark-incorporated](https://github.com/dark-incorporated). Each repository's `AGENTS.md` or `CLAUDE.md` links here instead of copying it.
 
 ## Why these rules
 
@@ -33,10 +33,10 @@ Each rule below either comes from one of these papers or is labelled house style
 8. **Quick start**: the `cargo add` line (a git dependency for an unpublished crate) and at most 20 lines of Rust that compile.
 9. **Try it**: one `cargo run --example <name>` that opens the hero GIF's scene.
 10. **What you can do**: 3 to 7 bullets of one sentence each, each linking a docs page, with at most 4 inline GIFs.
-11. **Part of the Coven**: two sentences linking the [family table](https://github.com/bevy-coven) and this crate's "use it in the Cauldron" section of [the book](https://bevy-coven.github.io/).
+11. **Part of Dark Inc.**: two sentences linking the [family table](https://github.com/dark-incorporated) and this crate's "use it in the Dark Factory" section of [the book](https://dark-incorporated.github.io/).
 12. **Bevy compatibility**: a table of crate versions against Bevy versions.
 13. **Learn more**: docs.rs, the book page, `docs/guide/`, the examples and the CHANGELOG. Links are the README feature that correlates most strongly with popularity (Venigalla & Chimalakonda).
-14. **Who and licence**: maintainer `@Ladvien`, the issues link, the org's [`CONTRIBUTING.md`](https://github.com/bevy-coven/.github/blob/main/CONTRIBUTING.md), and `MIT OR Apache-2.0`.
+14. **Who and licence**: maintainer `@Ladvien`, the issues link, the org's [`CONTRIBUTING.md`](https://github.com/dark-incorporated/.github/blob/main/CONTRIBUTING.md), and `MIT OR Apache-2.0`.
 
 **At least one still image.** Besides any GIF, the README carries one still screenshot or diagram. Still images correlate with popularity; animated images and video show almost no association (Venigalla & Chimalakonda).
 
@@ -63,20 +63,20 @@ Each rule below either comes from one of these papers or is labelled house style
 
 A README is shown in three places, and they resolve paths differently: GitHub resolves a relative path against the repository; crates.io rewrites a relative path to `https://github.com/<repository>/raw/HEAD/<path>`; **docs.rs rewrites nothing**, so a relative path in a README that rustdoc includes (`#![doc = include_str!("../README.md")]`) is a broken image there. So:
 
-- Every image in a crate's README is an absolute URL: `https://raw.githubusercontent.com/bevy-coven/<repo>/main/<path-from-repo-root>`. Every link to a file in the repository is `https://github.com/bevy-coven/<repo>/blob/main/<path>`. Pages under `docs/` that only GitHub shows may stay relative.
+- Every image in a crate's README is an absolute URL: `https://raw.githubusercontent.com/dark-incorporated/<repo>/main/<path-from-repo-root>`. Every link to a file in the repository is `https://github.com/dark-incorporated/<repo>/blob/main/<path>`. Pages under `docs/` that only GitHub shows may stay relative.
 - **A media file is never moved or renamed once a release has shipped pointing at it.** A published README is frozen on crates.io and docs.rs, so its URLs must keep resolving. If one must move, cut a release with the new URLs the same day, so the latest version's pages show it.
 - The check is an HTTP one: every `<img src>` on the crate's docs.rs and crates.io pages answers 200. `lychee --offline` only checks what stays relative.
 
 ## Videos
 
 - MP4 (H.264) for anything over 8 seconds or narrated: at most 120 seconds and 30 MB, with a poster PNG.
-- Videos live only in [the book](https://github.com/bevy-coven/bevy-coven.github.io) (`src/media/`), embedded on the crate's page. The README links to that page.
+- Videos live only in [the book](https://github.com/dark-incorporated/dark-incorporated.github.io) (`src/media/`), embedded on the crate's page. The README links to that page.
 
 ## Reproducible media
 
 `docs/media/README.md` lists every image, GIF and video with the command that regenerates it, the capture date, and the crate version it shows.
 
-Frames come from the repository's own capture path: `bevy_devshot`, an example's capture flag, or Grimoire's `tools/demo/record.py` with `tools/demo/render.py`. To turn frames into a GIF:
+Frames come from the repository's own capture path: `bevy_devshot`, an example's capture flag, or Dark Factory's `tools/demo/record.py` with `tools/demo/render.py`. To turn frames into a GIF:
 
 ```sh
 ffmpeg -framerate 30 -i f_%04d.png -vf "fps=15,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer" -loop 0 out.gif
@@ -104,4 +104,4 @@ In the top 1,000 GitHub projects, 28.9% carry an outdated code reference right n
 
 `AGENTS.md` and `CLAUDE.md` are written by hand and hold commands and rules, not an architecture tour. Files generated by an LLM did worse than none in 5 of 8 settings, and context files raise an agent's cost by 20-23% (Gloaguen et al.); developers keep them short, like configuration (Chatlatanagulchai et al.). Existing files are not rewritten for this guide; each carries one line pointing here:
 
-> README and docs follow https://github.com/bevy-coven/.github/blob/main/DOCUMENTATION.md; a feature is not done until its README line and, if visible, its GIF exist.
+> README and docs follow https://github.com/dark-incorporated/.github/blob/main/DOCUMENTATION.md; a feature is not done until its README line and, if visible, its GIF exist.

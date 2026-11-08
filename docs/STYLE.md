@@ -1,14 +1,15 @@
-# How the Coven writes code
+# How Dark Inc. writes code
 
-House style for every crate in [bevy-coven](https://github.com/bevy-coven). Where a crate's own `AGENTS.md` or `CLAUDE.md` disagrees, that file wins for its repository and this one gets fixed.
+House style for every crate in [dark-incorporated](https://github.com/dark-incorporated). Where a crate's own `AGENTS.md` or `CLAUDE.md` disagrees, that file wins for its repository and this one gets fixed.
 
 Two habits are borrowed from the documentation guide and apply to code too: **say when you are reasoning rather than reporting**, and **name the measurement** behind any claim about size, speed or coverage.
 
 ## Naming
 
 - **`bevy_` prefix, underscore, never a hyphen.** The exception in the family is `isomesh`, whose engine-free crates (`isomesh`, `isomesh-gpu`) carry no prefix because they do not link Bevy; `bevy_isomesh` is the wrapper that does.
+- An engine-free crate carries no `bevy_` prefix (`blueprint_model`, `blueprint_rng`, `blueprint_solver`, `dark_factory_snip`, `dark_factory_mcp`, `isomesh`).
 - **A package name matches its directory and its `[lib]` name**, so `use bevy_gooey` works with nothing to remember. A binary target is named for the package, not for the verb it runs.
-- The words are fixed: **Coven** is the organisation, **grimoire** is the knowledge a game loads, **Cauldron** is the editor, **Familiar** is the agent beside the person in it. A crate that is not the editor does not call itself a grimoire.
+- The words are fixed: **Dark Inc.** is the organisation, **Dark Factory** is the editor, **the Night Shift** is the agents in it, **blueprint** is what a game loads. A crate that is not the runtime does not call itself a blueprint.
 - **A crate is named for what it does for a game**, never for the repository it lives in or the product it was extracted from.
 
 ## Dependencies
@@ -17,7 +18,7 @@ Two habits are borrowed from the documentation guide and apply to code too: **sa
 - **Engine-free means no engine.** Data, arithmetic, solvers and seeded RNG do not link Bevy, and a crate that makes that promise carries a test that fails if `bevy` appears.
 - **`cargo add` before a new dependency.** A crate that grows a dependency grows its consumers' build; the reason goes in the comment, not in a commit message nobody re-reads.
 - **One Bevy version, family-wide** (`0.20.0`). A crate naming its own version does so only for `default-features = false`, and it says why.
-- **Prefer the family over a third party** for the job a Coven crate already does, and log the reason when you do not.
+- **Prefer the family over a third party** for the job a Dark Inc. crate already does, and log the reason when you do not.
 
 ## Layout
 
@@ -25,6 +26,24 @@ Two habits are borrowed from the documentation guide and apply to code too: **sa
 - **The engine-free half is its own crate**, not a feature flag on an engine-linking one.
 - **One integration-test binary per crate** (`autotests = false` plus a single `tests/all.rs` declaring `mod` per file). This is measured, not stylistic: 150 separate Bevy-linking test binaries took a 10-core machine more than an hour to gate; one binary took 108 s to build and 24 s to run.
 - **A test file is declared where the test binary can see it**, or it never compiles; a crate guard test refuses an undeclared file.
+
+## The machine plate
+
+The machine plate is the API every family crate presents, so the Dark Factory and a game can install any of them the same way.
+A crate is a **machine** if it adds systems, and a **tool** if it does not.
+Tools are `bevy_stigmergy`, `bevy_orca`, `bevy_light_grid` and the engine-free crates; tools follow only rule 6.
+
+1. **Entry point.** `<Name>Plugin`, or `<Name>Plugins` (a `PluginGroup`) when there are several plugins. `<Name>` is the package name without `bevy_`, in UpperCamelCase. Sub-plugins keep their names and stay exported.
+2. **One root set.** A public `<Name>Systems` (enum or unit struct). Every system the crate adds is in it, directly or through a sub-set configured with `.configure_sets(<schedule>, Sub.in_set(<Name>Systems...))`.
+3. **Settings.** A settings resource is one a project saves: every public `Resource` whose name ends in `Settings`, plus the resources a crate lists as settings in its own docs. It derives `Reflect` with `#[reflect(Resource, Default)]` and `#[cfg_attr(feature = "serde", reflect(Serialize, Deserialize))]`, has a `Default`, has serde derives behind the crate's `serde` feature with `#[serde(default)]`, and is registered by the entry plugin (`app.register_type::<T>()`). A resource that is runtime state never carries `reflect(Serialize, Deserialize)`.
+4. **Components.** Every public `Component` derives `Reflect` with `#[reflect(Component)]` and is registered by the entry plugin. A component meant for authoring (one a piece carries in a blueprint) also has `#[reflect(Default)]`, the serde reflect pair and serde derives, and must work when inserted alone on an entity: it carries `#[require(..)]` for whatever it needs.
+5. **Conformance test.** `tests/machine_plate.rs`, declared in the crate's single test binary if it has one. It builds `App::new()` with `MinimalPlugins` (plus what the crate's own tests already add to run its plugin) and the entry plugin, runs `app.update()` once, and asserts:
+   - every system in every schedule whose `name()` starts with `<crate_name>::` is in `systems_in_set(<Name>Systems::<v>)` for one of the crate's variants, listed explicitly;
+   - each listed settings type has `ReflectResource`, `ReflectDefault` and, with `serde`, `ReflectSerialize` and `ReflectDeserialize`;
+   - each listed public component has `ReflectComponent`.
+6. **Flat re-exports at the crate root, no `prelude` module.**
+
+The Dark Factory reads the plate through reflection: a settings resource is one file, `family/<crate>/<TypeIdent>.ron`, in a project; an authoring component is a part a piece can carry; the root set is how the Plugins door finds the crate's systems.
 
 ## Rust
 

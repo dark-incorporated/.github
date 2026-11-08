@@ -1,4 +1,4 @@
-# How the Bevy Coven fits together
+# How Dark Inc. fits together
 
 This is the descriptive document: what the crates are, what depends on what, and which rules the family already holds itself to. It is measured against the repositories, not aspirational — where a rule is not yet true, it says so.
 
@@ -8,15 +8,15 @@ Read bottom to top. A crate may depend on anything **below** it and nothing **ab
 
 ```
                     ┌──────────────────────────────┐
-  authoring         │  bevy_cauldron (the editor)  │  reads and writes a grimoire
-                    │  bevy_cauldron_mcp           │  the same verbs, over MCP
+  authoring         │  bevy_dark_factory (editor)  │  reads and writes a blueprint
+                    │  dark_factory_mcp            │  the same verbs, over MCP
                     └───────────────┬──────────────┘
                                     │
                     ┌───────────────▼──────────────┐
-  the book          │  bevy_grimoire   (runtime)   │  a game loads a library + a map
-                    │  bevy_grimoire_core          │  the world model, engine-free
+  the blueprint     │  bevy_blueprint  (runtime)   │  a game loads a library + a map
+                    │  blueprint_model             │  the world model, engine-free
                     └───────────────┬──────────────┘
-                                    │  (core is optional to a game)
+                                    │  (the model is optional to a game)
   ┌────────────┬────────────┬───────▼──────┬─────────────┬──────────────┐
   │ World      │ Life       │ Interface    │ Spectacle   │ Agents       │
   │ bevy_      │ bevy_      │ bevy_gooey   │ bevy_       │ bevy_fairy   │
@@ -29,18 +29,18 @@ Read bottom to top. A crate may depend on anything **below** it and nothing **ab
   └────────────┴────────────┴──────────────┴─────────────┴──────────────┘
                                     │
                     ┌───────────────▼──────────────┐
-  primitives        │  bevy_grimoire_core (data)   │  constraint IR, solvers, WFC
-                    │  bevy_grimoire_rng           │  one seeded stream per simulation
-                    │  bevy_grimoire_solver        │  SAT, deterministic
-                    │  bevy_grimoire_anim          │  clip-weight blending
-                    │  bevy_grimoire_snip          │  a rectangle out of a PNG
+  primitives        │  blueprint_model (data)      │  constraint IR, solvers, WFC
+                    │  blueprint_rng               │  one seeded stream per simulation
+                    │  blueprint_solver            │  SAT, deterministic
+                    │  bevy_blueprint_anim         │  clip-weight blending
+                    │  dark_factory_snip           │  a rectangle out of a PNG
                     │  bevy_oracle                 │  typed questions to a decision model
                     └──────────────────────────────┘
 ```
 
 ## The dependency rule, and the one real edge
 
-The family is deliberately flat. **Measured 2026-11-02, across every `Cargo.toml` in the org**, there is exactly one crate-to-crate dependency between family repositories:
+The family is deliberately flat. **Measured 2026-11-02, across every `Cargo.toml` in the org**, there are these crate-to-crate dependencies between family repositories:
 
 | From | To | How | Why |
 |---|---|---|---|
@@ -48,10 +48,11 @@ The family is deliberately flat. **Measured 2026-11-02, across every `Cargo.toml
 | `bevy_society` | `bevy_stigmergy` | crates.io `0.2`, optional (`fields`) | marks on a grid that crowds follow |
 | `bevy_society` | `bevy_speech_bubbles` | crates.io `0.2`, optional (`dialogue`) | barks and conversations |
 | `bevy_society` | `bevy_fairy` | **git rev pin**, optional | an agent reads a running society |
+| `bevy_society` | `blueprint_rng` | crates.io `0.2` | one seeded stream per simulation |
 
 Everything else in the family depends on **no other family crate**: `bevy_elements`, `bevy_flora`, `bevy_lights`, `bevy_light_grid`, `bevy_gooey`, `bevy_carnage`, `isomesh`, `bevy_devshot`, `bevy_orca`, `bevy_stigmergy` and `bevy_speech_bubbles` are all leaves. That is the property that makes "use one crate alone" real rather than a slogan.
 
-Inside the `bevy_grimoire` workspace the edges are: `bevy_grimoire_core` → `bevy_grimoire_rng`, `bevy_grimoire_solver`; `bevy_cauldron` → `bevy_grimoire_core`, `bevy_grimoire_anim`, `bevy_grimoire_snip`, `bevy_oracle`; `bevy_cauldron_mcp` → `bevy_cauldron`. Each of those is a **path** dependency, so an editor-only change never touches a game's build.
+Inside the `bevy_dark_factory` workspace the edges are: `blueprint_model` → `blueprint_rng`, `blueprint_solver`; `bevy_blueprint` → `blueprint_model`; `bevy_dark_factory` → `bevy_blueprint`, `blueprint_model`, `bevy_blueprint_anim`, `dark_factory_snip`, `bevy_oracle`; `dark_factory_mcp` → `blueprint_model`, `dark_factory_snip`, `bevy_oracle`. Each of those is a **path** dependency, so an editor-only change never touches a game's build.
 
 > **Known exception, to be fixed:** `bevy_society` pins `bevy_fairy` by git revision at `https://github.com/Ladvien/bevy_fairy`, the personal account, while the four crates beside it resolve from crates.io. A git pin also means `bevy_society` cannot be published from a registry-only consumer without a `[patch]`. Both are tracked, not designed.
 
@@ -61,15 +62,16 @@ A crate that does not need Bevy must not link it, and one of them enforces it:
 
 | Crate | Links Bevy? | Enforcement |
 |---|---|---|
-| `bevy_grimoire_core` | **no** | `crates/bevy_grimoire_core/tests/engine_free.rs` fails the build on any `bevy*` dependency outside an explicit allow-list |
-| `bevy_grimoire_rng` | no | none (no test) |
-| `bevy_grimoire_solver` | no | none (no test) |
-| `bevy_grimoire_snip` | no | none (no test) |
-| `bevy_oracle` | no | none (no test) |
+| `blueprint_model` | **no** | `crates/blueprint_model/tests/engine_free.rs` fails the build on any `bevy*` dependency outside an explicit allow-list |
+| `blueprint_rng` | no | none (no test) |
+| `blueprint_solver` | no | none (no test) |
+| `dark_factory_snip` | no | none (no test) |
+| `dark_factory_mcp` | no | none (no test) |
+| `bevy_oracle` | no | none (no test); unrenamed: out of the rename's scope |
 | `isomesh` | no | `isomesh` and `isomesh-gpu` are engine-free; `bevy_isomesh` is the wrapper |
 | everything else | yes | — |
 
-**The open question this exposes:** four crates carry the `bevy_` prefix without depending on Bevy, which contradicts the reading that the prefix means "this needs the engine". `isomesh` resolves the same contradiction the other way — its engine-free core is `isomesh` and its wrapper is `bevy_isomesh`. Renaming the four is a breaking rename of published crates (`bevy_grimoire_rng` 0.1.0 and `bevy_grimoire_solver` 0.1.1 are on crates.io, and `bevy_society` depends on `bevy_grimoire_rng` from it), so the family currently lives with the inconsistency rather than pay for it. `STYLE.md` states the rule as it is applied today.
+An engine-free crate carries no `bevy_` prefix, so the name says whether it links the engine. `bevy_oracle` is the one exception left: it was outside the 2026-11-08 rename, and renaming it is a separate breaking change.
 
 ## Shared constants
 
@@ -81,15 +83,15 @@ These are facts every crate is currently expected to match. They belong in one p
 | Rust edition | `2024` | **except `bevy_fairy`, still on `2021`** |
 | MSRV | `1.97.1` | most crates; `isomesh` declares `1.89` for its engine-free core |
 | Licence | `MIT OR Apache-2.0` | every crate, and `CONTRIBUTING.md` makes contributions dual-licensed by default |
-| `repository` | `https://github.com/bevy-coven/<repo>` | **except `bevy_devshot`'s standalone copy, which names the personal account** |
+| `repository` | `https://github.com/dark-incorporated/<repo>` | **except `bevy_devshot`'s standalone copy, which names the personal account** |
 
 ## Duplicated crate names
 
-`bevy_devshot` exists twice: `crates/bevy_devshot` inside the `bevy_grimoire` workspace (`publish = false`) and the standalone [`bevy-coven/bevy_devshot`](https://github.com/bevy-coven/bevy_devshot) repo. crates.io reserves names globally and the workspace copy is unpublished, so whichever is published first owns the name. This is a decision waiting to be made, not a settled fact — do not add a second copy of anything else in the meantime.
+`bevy_devshot` exists twice: `crates/bevy_devshot` inside the `bevy_dark_factory` workspace (`publish = false`) and the standalone [`dark-incorporated/bevy_devshot`](https://github.com/dark-incorporated/bevy_devshot) repo. crates.io reserves names globally and the workspace copy is unpublished, so whichever is published first owns the name. This is a decision waiting to be made, not a settled fact — do not add a second copy of anything else in the meantime.
 
 ## How a change crosses a boundary
 
-The seam between the Coven and a game is an **issue**, not a patch:
+The seam between Dark Inc. and a game is an **issue**, not a patch:
 
 1. The game files an issue here labelled `consumer`, `consumer:<game>`, and `bug` or `enhancement`, saying what it needs, the current behaviour, the proposed API, edge cases, and an acceptance test the crate can run alone.
 2. The crate builds the **general form** — the game is the example, never a name in the API — and proves it with a test in its own repository.

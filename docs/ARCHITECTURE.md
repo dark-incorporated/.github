@@ -50,6 +50,8 @@ The family is deliberately flat. **Measured 2026-11-02, across every `Cargo.toml
 | `bevy_society` | `bevy_fairy` | **git rev pin**, optional | an agent reads a running society |
 | `bevy_society` | `blueprint_rng` | crates.io `0.2` | one seeded stream per simulation |
 
+`bevy_presence`, a private workspace that is not published yet, depends on `bevy_speech_bubbles` `0.3.0`, `bevy_siren` `0.1.0`, `bevy_gooey` `0.51.8` and `bevy_fairy` `0.13.0` from crates.io, in its canary app (`apps/canary`) only: measured from its `Cargo.toml` files on 2026-11-16, the day it moved into the org.
+
 Everything else in the family depends on **no other family crate**: `bevy_elements`, `bevy_flora`, `bevy_lights`, `bevy_light_grid`, `bevy_gooey`, `bevy_carnage`, `isomesh`, `bevy_devshot`, `bevy_orca`, `bevy_stigmergy` and `bevy_speech_bubbles` are all leaves. That is the property that makes "use one crate alone" real rather than a slogan.
 
 Inside the `bevy_dark_factory` workspace the edges are: `blueprint_model` → `blueprint_rng`, `blueprint_solver`; `bevy_blueprint` → `blueprint_model`; `bevy_dark_factory` → `bevy_blueprint`, `blueprint_model`, `bevy_blueprint_anim`, `dark_factory_snip`, `bevy_oracle`; `dark_factory_mcp` → `blueprint_model`, `dark_factory_snip`, `bevy_oracle`. Each of those is a **path** dependency, so an editor-only change never touches a game's build.

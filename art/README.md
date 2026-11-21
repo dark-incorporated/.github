@@ -1,118 +1,126 @@
 # Org art
 
-The Dark Inc. avatar and banner: technomancer pixel art, a gritty 1980s sci-fi film poster with amber and green phosphor, neon magenta, rain and industrial night as its motifs. **The current ones (2026-11-08) come from the Retro Diffusion cloud API, RD Pro** (see "Round 5" below). The Bevy Coven art they replace (rounds 1 to 4) is kept in `coven/`.
+The Dark Incorporated avatar, banner, book banner, the style anchor every other
+image is drawn against, and one chapter header per crate. All of it comes from
+Retro Diffusion through `dark_inc_art.py`; the two crates with nothing to show
+get scripted stills from `diagrams.py`. Both draw in the family palette.
 
-- `avatar.png` (512×512) and `avatar-1024.png`: the current avatar, `avatar-3` of round 5: a hooded technomancer, face lit from below by a green phosphor CRT, one amber cybernetic eye, orange and magenta rim light in the rain, native 256×256 at 2× and 4× nearest-neighbour. `banner.png` (1024×512, native 256×128 at 4×): the current banner, `banner-3`: a dark factory at night from the wet street, smokestacks, one amber-lit window, a giant robotic arm against a neon-magenta sky. `../profile/banner.png` is a copy of the banner.
-- `rd_api.py`: the Retro Diffusion v2 client (`python3 rd_api.py JOBS.json OUTDIR [--cost-only]`). It reads the key from `~/.config/retrodiffusion/api_key` and never takes it from an argument. `rd-jobs-dark-inc.json` holds round 5's four jobs (avatar, banner, the editor's app icon and its splash); `rd-jobs-round1.json` holds round 4's. `round5-sheet-*.png` show round 5's candidates.
-- `dark_art.py`: the local generator for rounds 1 to 3. Its docstring has the job schema.
-- `avatar.json`, `banner.json`, `banner-round2.json`, `banner-round3.json`: the local jobs that were run. `avatar-sheet.png`, `banner-sheet-round1.png`, `banner-sheet-round2.png`, `banner-sheet-round3.png` show their candidates. `banner-alt-wizard_storm-0.png` is the local runner-up banner.
+The motif is Warhammer 40,000 meets Neuromancer: a gothic industrial
+machine-cathedral inside a neon cyberpunk night city, rain, grime, CRT glow, in
+the manner of a 1980s pixel-art adventure game. No text, no logos, no gore, and
+no Games Workshop marks or named factions.
 
-## Round 5: Dark Inc. (2026-11-08)
+- `palette.json`: the 64-colour EGA master set and the three 16-colour subsets
+  every image is held to. Colours are written as six uppercase hex digits with
+  no `#`, so `FF55FF` is magenta.
+- `jobs.json`: every generation job, in the order they run.
+- `anchor.png`: the style anchor, `art/anchor.png`. Every other job sends it as
+  a reference image, so the whole family shares one look.
+- `avatar.png` and `banner.png` are copied to `profile/avatar.png` and
+  `profile/banner.png`; `book-banner.png` heads the book;
+  `chapters/<repo>.png` heads each crate's chapter and its README.
+- `lock.json` records which candidate was picked for each job, its seed, its
+  cost and the hash of the inputs that produced it. It is written by `pick` and
+  committed with the art: without it every job would look never-picked and a
+  rerun would regenerate the whole set.
 
-RD Pro (`rd_pro__default`, 256 px, four candidates a job, 16 images for $2.88), every prompt ending ", gritty 1980s sci-fi film poster, pixel art, no text". Run on mac_air, which holds the key: `python3 rd_api.py rd-jobs-dark-inc.json OUT --cost-only`, then without `--cost-only`. The icon goes to `bevy_dark_factory`'s `crates/bevy_dark_factory/macos/icon-256.png` (and `DarkFactory.icns` through `tools/release/macos/make_icns.py`), the splash to `crates/bevy_dark_factory/assets/ui/splash.png` (256×80). The owner picked each winner from contact sheets; the scores used **d** = the motif: amber or green phosphor, neon magenta, rain, industrial night.
+## Palette
 
-|Job|Seeds|0|1|2|3|Winner|
-|---|---|---|---|---|---|---|
-|avatar|9101-9104|8|9|8|**10**|`avatar-3`: CRT under the face, amber eye, rim light, rain; 0 has no CRT|
-|banner|9201-9204|8|8|8|**10**|`banner-3`: magenta sky, arm, one amber window, clean edges; 1 has an orange edge artifact|
-|icon|9301-9304|9|**10**|7|9|`icon-1`: the clearest silhouette at small sizes|
-|splash|9401-9404|8|**10**|7|9|`splash-1`: arm against magenta, amber window, readable at 256×80|
+"Between CGA and VGA" is EGA: the master set is all 64 colours whose red, green
+and blue channels are each one of `00`, `55`, `AA`, `FF`. Every image uses at
+most 16 colours, all from one named subset:
 
-## Round 4: the Retro Diffusion cloud API (2026-11-01)
+|Subset|Mood|Colours|
+|---|---|---|
+|`night_city`|Neuromancer: neon on wet black|`000000 000055 0000AA 5500AA AA00AA FF00FF FF55FF 550055 005555 00AAAA 00FFFF 55FFFF 555555 AAAAAA FFFFFF 55AAFF`|
+|`cathedral`|40k grime: rust, brass, soot|`000000 550000 AA0000 FF5555 555500 AA5500 AAAA55 FFFF55 555555 AAAAAA FFFFFF 005500 55AA55 000055 5555AA 550055`|
+|`house`|banners, avatar, book: the Dark Inc. house set|`000000 000055 5500AA AA00AA FF55FF 00AAAA 55FFFF 550000 AA0000 AA5500 FFFF55 555555 AAAAAA FFFFFF 005555 FF5555`|
 
-RD Pro (`rd_pro__default` and `rd_pro__fantasy`, 256 px, $0.18 an image, 16 images for $2.88) draws far more detail than the local SD 1.5 checkpoints: feathers, a textured moon, rooftops with lit windows. The API is `POST https://api.retrodiffusion.ai/v2/inferences` with the header `X-RD-Token`, a fresh `Idempotency-Key` per paid request, then `GET .../tasks/{task_id}` until it succeeds; `"check_cost": true` prices a request for free (and takes no idempotency key). The reference is https://github.com/Retro-Diffusion/api-examples.
+`house` is the family's own set and carries the org avatar, the banner and the
+book; a crate's chapter art takes the subset that suits its subject, and the
+anchor is `house`.
 
-The first avatar chosen, `av_ref-0` (drawn from the v1 avatar as a `reference_images` input), was rejected by the owner: its raised wing and its folded wing read as three wings. `av_default-2` has two clearly separate wings, is symmetrical, and holds up at 40 px. Check the wing count on a bird before you pick it. The banner's winner kept the brand's yellow moon where `bn_fantasy-2` went pale lavender. A prompt names the subject and the mood only (`rd_pro` handles the pixel-art rendering), and says "no text".
+## Generating
 
-## Rerun
-
-Copy `dark_art.py` and the job file to `big:~/dark-art/`, then:
+The key lives at `~/.config/retrodiffusion/api_key` (mode 600). The tool reads
+it from there and nowhere else, never prints it, and refuses to run without it:
 
 ```sh
-ssh big "bash -lc 'gpu-tenant run 3d --who dark-incorporated-art@big --wait --mem 16G --note \"dark-incorporated org art\" -- ~/sanctuary-icons/.venv/bin/python ~/dark-art/dark_art.py --jobs ~/dark-art/avatar.json --out ~/dark-art/runs/avatar-1'"
-ssh big "bash -lc 'gpu-tenant run 3d --who dark-incorporated-art@big --wait --mem 16G --note \"dark-incorporated org art\" -- ~/sanctuary-icons/.venv/bin/python ~/dark-art/dark_art.py --jobs ~/dark-art/banner-round3.json --out ~/dark-art/runs/banner-round3-3'"
+python3 art/dark_inc_art.py plan  --state ~/.local/state/dark-inc-docs/art
+python3 art/dark_inc_art.py cost  --state ~/.local/state/dark-inc-docs/art --budget-usd 5
+python3 art/dark_inc_art.py run   --state ~/.local/state/dark-inc-docs/art --budget-usd 5
+python3 art/dark_inc_art.py sheet --state ~/.local/state/dark-inc-docs/art
+python3 art/dark_inc_art.py pick  chapter_bevy_orca 1 --state ~/.local/state/dark-inc-docs/art
 ```
 
-The avatar winner is `runs/avatar-1/candidates/raven_grimoire-1.png` (seed 1002); the banner winner is `runs/banner-round3-3/candidates/raven_moon-3.png` (seed 9204). Generation is seeded, so the same checkpoint, diffusers version and GPU give the same image.
+- `plan` lists every job as `pending` or `current` and says why. A job is
+  pending when its output is missing, it was never picked, or the hash of its
+  inputs changed. The hash covers the job's own JSON, its subset's colours and
+  the sha256 of `anchor.png`; if the anchor is pending, every job is pending.
+- `cost` prices every pending candidate with the API's free `check_cost` call
+  and prints a total per job. It charges nothing. A whole run is about $2.90:
+  13 `rd_core` candidates at $0.10 and 32 `rd_lite` candidates at $0.05.
+- `run` generates candidates into `STATE/art/<id>/cand-<k>.png`, anchor first.
+  It refuses a single call over $0.50 and a run over `--budget-usd` (default
+  $5.00), and it will not run the rest until the anchor has been picked. Each
+  candidate is measured against its subset at native size and reported
+  `palette_fail` when it strays.
+- `sheet` writes `STATE/art/<id>/sheet.png`, the contact sheet each pick is made
+  from.
+- `pick ID K` scales candidate `K` to its output size with NEAREST, writes it,
+  copies it to the job's `copy_to` targets, and records the pick in `lock.json`.
+  A candidate that fails the palette is refused.
 
-## How the winners were picked
+The style anchor is the first thing to generate: the rest use it as a reference
+image, so the family reads as one set. A paid call is preceded by a free price
+check and carries a fresh `Idempotency-Key`; a task that failed is never
+resubmitted. A run that loses the network keeps the key, so re-running asks for
+the same task rather than paying twice.
 
-Each candidate scored 0-2 on five criteria, 10 in all:
+## Picking
 
-- **a** the subject reads at a 40 px thumbnail (banner: at full size);
-- **b** one clear subject with a strong silhouette against the sky;
-- **c** no text-like glyphs, pentagrams or gore;
-- **d** the motif: moon, purple-to-orange gradient, lightning or chrome;
-- **e** a clean pixel grid: no `block` fallback, no smeared pixels.
+Each candidate scores 0-2 on five criteria, 10 in all:
 
-The highest total wins; a tie goes to a raven, because the raven is the familiar.
+- **a**: reads at a 64 px thumbnail;
+- **b**: one subject with a strong silhouette;
+- **c**: no glyphs, logos or gore;
+- **d**: the motif — the machine-cathedral, the night city, rain, CRT glow;
+- **e**: palette compliance, measured.
 
-### Avatar (round 1, 10 candidates; `RetroDiffusion24x-64xModel`, 512 px, 64×64 native)
+The highest total wins; a tie goes to the lower candidate number. The scores and
+the winner go in the run's `REPORT.md`. When a person is available they pick
+instead, from the same sheets.
 
-|Candidate|Seed|a|b|c|d|e|Total|
-|---|---|---|---|---|---|---|---|
-|raven_grimoire-0|1001|2|2|2|1|2|9|
-|**raven_grimoire-1**|1002|2|2|2|2|2|**10**|
-|witch_moon-0|2001|1|0|2|1|2|6|
-|witch_moon-1|2002|2|2|2|2|2|10|
-|cat_grimoire-0|3001|1|1|2|1|2|7|
-|cat_grimoire-1|3002|2|2|2|1|2|9|
-|grimoire_runes-0|4001|1|1|1|2|2|7|
-|grimoire_runes-1|4002|1|1|1|2|2|7|
-|raven_hat-0|5001|2|2|2|1|2|9|
-|raven_hat-1|5002|1|1|2|2|2|8|
+## Scripted stills
 
-`raven_grimoire-1` and `witch_moon-1` tie at 10; the raven wins the tie. It is a black raven with purple wings against a yellow-and-orange moon, ringed in purple.
+`bevy_devshot` and `bevy_light_grid` have no visual output to photograph, so
+their README hero is a diagram:
 
-### Banner, round 1 (6 candidates; `RetroDiffusion128xModel`, 768×256, `expected_factor` 4)
+```sh
+python3 art/diagrams.py devshot    --out ../bevy_devshot/docs/media/hero.png
+python3 art/diagrams.py light_grid --out ../bevy_light_grid/docs/media/hero.png
+```
 
-Pixelfixer recovered a 96×32 grid on all six, a factor of 8 rather than the uncalibrated guess of 4, so every candidate fell back to a block reduce and scored 0 on **e**.
+`devshot` shows a terminal asking for a screenshot, the game window and the
+written `screenshot.png`, joined by arrows. `light_grid` shows a 32×18 cell grid
+lit by two lamps, with one wall casting a hard shadow. Both are drawn in
+`night_city`, use at most 16 colours, and are captioned "schematic" in the crate
+README because they show what the crate does, not a screenshot of it.
 
-|Candidate|Seed|a|b|c|d|e|Total|
-|---|---|---|---|---|---|---|---|
-|coven_altar-0|6001|1|1|2|1|0|5|
-|coven_altar-1|6002|1|1|1|0|0|3|
-|wizard_cliff-0|7001|1|1|2|1|0|5|
-|wizard_cliff-1|7002|1|1|2|1|0|5|
-|castle_brooms-0|8001|2|2|2|1|0|7|
-|castle_brooms-1|8002|1|1|2|1|0|5|
+## Formerly
 
-### Banner, round 2 (6 candidates; the two best subjects, seeds `seed + 200`, `expected_factor` 8, `out_scale` 12)
+Before 2026-11-21 this directory held two earlier sets, both kept under
+`archive/`:
 
-Round 1's best reached the threshold of 7 only because its grid was wrong, so round 2 reran the two best subjects at the measured factor of 8.
+- Rounds 1 to 4 of the family's pre-Dark-Inc. art — a raven against a moon, a
+  witch and a castle — live beside `archive/round5/`, generated on big with the
+  local Retro Diffusion SD 1.5 checkpoints through `dark_art.py`, with the job
+  files and contact sheets that produced them.
+- `archive/round5/` holds the 2026-11-08 Dark Inc. round: four RD Pro jobs
+  (`rd_api.py`, `rd-jobs-dark-inc.json`) that made the technomancer avatar, the
+  smokestack banner, the robotic-arm app icon and the splash, at $0.18 an image.
 
-|Candidate|Seed|a|b|c|d|e|Total|
-|---|---|---|---|---|---|---|---|
-|castle_brooms-0|8201|1|1|2|1|2|7|
-|castle_brooms-1|8202|2|1|2|2|2|9|
-|castle_brooms-2|8203|2|2|2|2|2|10|
-|wizard_cliff-0|7201|1|0|2|1|2|6|
-|wizard_cliff-1|7202|1|1|2|1|2|7|
-|**wizard_cliff-2**|7203|2|2|2|2|2|**10**|
-
-`wizard_cliff-2` and `castle_brooms-2` tie at 10; the banner goes to `wizard_cliff-2`, a dark raven-winged figure on a rock under a full moon, with airbrushed purple, orange and yellow cloud bands and a lightning streak, because its figure is a raven.
-
-### Banner, round 3 (16 candidates; `RetroDiffusion24x-64xModel`, 1024×512, 30 steps, guidance 7.5, `expected_factor` 8, `out_scale` 9)
-
-The owner rejected the round 2 winner: at 96×32 native pixels the figure was a smear. Round 3 used the checkpoint that made the avatar, a 2:1 frame (SD 1.5 repeats its subject across a 3:1 one) and a 128×64 native grid, with a sharper prompt (`banner-round3.json`). Every candidate recovered a clean 128×64 grid.
-
-|Candidate|Seed|a|b|c|d|e|Total|
-|---|---|---|---|---|---|---|---|
-|witch_castle-0|9001|1|1|2|1|2|7|
-|witch_castle-1|9002|2|1|2|1|2|8|
-|witch_castle-2|9003|1|0|2|1|2|6|
-|witch_castle-3|9004|1|1|2|2|2|8|
-|wizard_storm-0|9101|2|2|2|1|2|9|
-|wizard_storm-1|9102|1|1|2|1|2|7|
-|wizard_storm-2|9103|1|1|2|1|2|7|
-|wizard_storm-3|9104|1|1|2|2|2|8|
-|raven_moon-0|9201|2|2|2|1|2|9|
-|raven_moon-1|9202|2|2|2|1|2|9|
-|raven_moon-2|9203|1|1|2|2|2|8|
-|**raven_moon-3**|9204|2|2|2|2|2|**10**|
-|coven_cauldron-0|9301|1|1|2|1|2|7|
-|coven_cauldron-1|9302|1|1|2|1|2|7|
-|coven_cauldron-2|9303|1|1|2|1|2|7|
-|coven_cauldron-3|9304|1|0|2|1|2|6|
-
-The banner is `raven_moon-3`: a black raven with spread wings flying across a yellow moon, airbrushed pink and orange clouds on a purple sky, over a black city skyline. It fills the frame edge to edge, which a banner needs. The runner-up, `wizard_storm-0` (a hooded wizard and a raven on a rock before a huge moon), is kept as `banner-alt-wizard_storm-0.png`; it loses on the motif because a dark vignette rims its corners.
+`archive/` keeps the names it was written with, because its job files must still
+reproduce the images they made; the rename check skips that tree for the same
+reason. `archive/README.md` is the old README verbatim, including the per-round
+score tables and the API notes, so those runs can still be checked and repeated.

@@ -1,0 +1,30 @@
+name: README rules
+
+on: workflow_call
+
+permissions:
+  contents: read
+
+jobs:
+  readme:
+    name: README rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: dark-incorporated/.github
+          path: .dark-inc
+
+      - name: Install Pillow
+        run: pip install pillow
+
+      - name: README structure
+        run: python3 .dark-inc/tools/readme_check.py --repo .
+
+      - name: Code references
+        run: python3 .dark-inc/tools/doc_refs_check.py --repo .
+
+      - name: Media manifest
+        run: python3 .dark-inc/tools/media_check.py --repo .

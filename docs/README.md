@@ -9,7 +9,8 @@ Everything that spans more than one repository lives here, in [`dark-incorporate
 | What Dark Inc. is, where it is going | [`../VISION.md`](../VISION.md) |
 | How the crates fit together, and what may depend on what | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
 | How we write Rust, and how a crate is laid out | [`STYLE.md`](STYLE.md) |
-| How every crate is documented (README, GIFs, `docs/`) | [`../DOCUMENTATION.md`](../DOCUMENTATION.md) |
+| How every crate is documented (structure, checks, review) | [`../DOCUMENTATION.md`](../DOCUMENTATION.md) |
+| Names, voice, the palette and the art | [`../STYLE.md`](../STYLE.md) |
 | How to contribute, file issues, request a consumer change | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
 | Where repositories and worktrees live on a machine | [`WORKSPACE.md`](WORKSPACE.md) |
 | Research, measurements and decisions behind a design | [`research/`](research/) |

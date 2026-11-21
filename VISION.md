@@ -20,13 +20,13 @@ A lights-out factory runs in the dark because the machines do the work. The pers
 
 The vocabulary is deliberately small, and the words mean one thing each:
 
-|Word|What it is|Replaces|
-|---|---|---|
-|**Dark Inc.**|the organisation and the family (`github.com/dark-incorporated`)|Bevy Coven|
-|**Dark Factory**|the editor (`bevy_dark_factory`)|the Cauldron|
-|**the Night Shift**|agents working in the Dark Factory over MCP (`dark_factory_mcp`)|the Familiar|
-|**blueprint**|what a game loads: a library of pieces, maps, and the grammar learned from an authored example (`bevy_blueprint`, `blueprint_model`)|the grimoire|
-|**work order**|a word for *operation* in docs only; code keeps `operation` and `oplog`|—|
+|Word|What it is|
+|---|---|
+|**Dark Inc.**|the organisation and the family (`github.com/dark-incorporated`)|
+|**Dark Factory**|the editor (`bevy_dark_factory`)|
+|**the Night Shift**|agents working in the Dark Factory over MCP (`dark_factory_mcp`)|
+|**blueprint**|what a game loads: a library of pieces, maps, and the grammar learned from an authored example (`bevy_blueprint`, `blueprint_model`)|
+|**work order**|a word for *operation* in docs only; code keeps `operation` and `oplog`|
 
 So a game depends on the blueprint; a person builds it in the Dark Factory; and every standalone crate here is a machine the Dark Factory can install. The editor is `bevy_dark_factory`; the runtime is `bevy_blueprint`.
 

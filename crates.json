@@ -1,0 +1,146 @@
+[
+  {
+    "repo": "bevy_dark_factory",
+    "part": "The editor",
+    "title": "Dark Factory",
+    "pitch": "A standalone world-building editor: author maps from an asset library, save what a game can load.",
+    "capture_host": "big",
+    "subset": "house",
+    "hero": "docs/media/agent-drives.gif"
+  },
+  {
+    "repo": "bevy_gooey",
+    "part": "Interface",
+    "title": "Gooey",
+    "pitch": "Game and tool interfaces for Bevy 0.20: a skin, ready-made widgets and keyboard and gamepad navigation, built on Bevy's own headless widgets (the behaviour with no look of its own).",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/media/gallery.gif"
+  },
+  {
+    "repo": "bevy_elements",
+    "part": "World",
+    "title": "Elements",
+    "pitch": "Living environments for Bevy 0.20: a sun and moon on real ephemerides, the bright-star sky, a seeded climate that schedules hourly weather, a GPU wind field, volumetric clouds, rain and snow, lightning and thunder, fog, heightfield terrain with erosion and flooding, ground cover, rocks, dust, paths and trails — all in compute shaders, for anyone building an open world that has to look alive without a weather artist.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/media/tour_hero.gif"
+  },
+  {
+    "repo": "bevy_flora",
+    "part": "World",
+    "title": "Flora",
+    "pitch": "**Parametric, stylized procedural trees for Bevy that grow over time**, for anyone building a forest without modelling one: pick one of 20 presets or tune every parameter, spawn a component, and watch a seedling grow into a mature tree. The same seed always gives the same tree.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/media/growth.gif"
+  },
+  {
+    "repo": "isomesh",
+    "part": "World",
+    "title": "Isomesh",
+    "pitch": "Signed distance field in, triangles out: isosurface extraction for Rust voxel games and CAD tools, with a Bevy plugin.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/media/kitchen-sink.gif"
+  },
+  {
+    "repo": "bevy_lights",
+    "part": "World",
+    "title": "Lights",
+    "pitch": "Practical lights for Bevy: the fires a scene's props actually carry — a budgeted pool of real lights over thousands of virtual ones, with shader flames and the flicker that makes them read.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/media/showcase.gif"
+  },
+  {
+    "repo": "bevy_light_grid",
+    "part": "World",
+    "title": "Light Grid",
+    "pitch": "An illuminance grid that creature AI can read: \"how bright is it here, and which way is brighter\", computed on the CPU per cell, for games where things flee or seek the light.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/media/hero.png"
+  },
+  {
+    "repo": "bevy_society",
+    "part": "Life",
+    "title": "Society",
+    "pitch": "Give your Bevy world a living society: villagers who remember, gossip, take sides, fall out and make up, and whose days you can script.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/media/village.gif"
+  },
+  {
+    "repo": "bevy_stigmergy",
+    "part": "Life",
+    "title": "Stigmergy",
+    "pitch": "Fading marks on a grid that a crowd coordinates through, like ant trails: for game AI that should converge, scatter or rally without any agent planning a route.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/foraging.gif"
+  },
+  {
+    "repo": "bevy_orca",
+    "part": "Life",
+    "title": "Orca",
+    "pitch": "Walkers that steer around each other without colliding: ORCA (optimal reciprocal collision avoidance) as a plain library on `bevy_math`'s `Vec2`, for crowds in games.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/circle_swap.gif"
+  },
+  {
+    "repo": "bevy_speech_bubbles",
+    "part": "Life",
+    "title": "Speech Bubbles",
+    "pitch": "Speech balloons, barks, conversation graphs and a skinnable dialog box for Bevy games whose characters talk.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/chatter.gif"
+  },
+  {
+    "repo": "bevy_carnage",
+    "part": "Spectacle",
+    "title": "Carnage",
+    "pitch": "Wounds that peel to the bone, bleed, pool and dry, and bodies that break into chunks, for Bevy characters, deterministic to the bit.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/preset.gif"
+  },
+  {
+    "repo": "bevy_fairy",
+    "part": "Agents and tooling",
+    "title": "Fairy",
+    "pitch": "Let a coding agent look inside a running Bevy game, drive it, and ask the person playing it for help — without touching your desktop.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/media/hero.gif"
+  },
+  {
+    "repo": "bevy_siren",
+    "part": "Sound",
+    "title": "Siren",
+    "pitch": "Sound for Bevy 0.20 that decides *what* plays and *how loud*: cues with variants, buses that duck, a voice budget that refuses politely, music that changes on the bar, and a log of what played and why.",
+    "capture_host": "bmb",
+    "subset": "cathedral",
+    "hero": "docs/media/demo/tour-poster.png"
+  },
+  {
+    "repo": "bevy_devshot",
+    "part": "Agents and tooling",
+    "title": "Devshot",
+    "pitch": "A frame on demand: touch a sentinel file and the next frame writes a PNG, straight from the GPU.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": "docs/media/hero.png"
+  },
+  {
+    "repo": "bevy_presence",
+    "part": "Presence (VR)",
+    "title": "Presence",
+    "pitch": "Presence for Bevy: the crates a VR game needs to put a player in a room with a character who listens, answers, looks at them and moves its mouth.",
+    "capture_host": "bmb",
+    "subset": "night_city",
+    "hero": null
+  }
+]

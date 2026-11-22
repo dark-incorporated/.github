@@ -1,0 +1,100 @@
+{
+  "canonical": [
+    {
+      "thing": "family",
+      "canonical": "Dark Incorporated (short: Dark Inc.), org dark-incorporated",
+      "formerly": ["Bevy Coven", "the Coven", "bevy-coven"]
+    },
+    {
+      "thing": "editor",
+      "canonical": "the Dark Factory (repo/crate bevy_dark_factory, app DarkFactory.app)",
+      "formerly": ["Grimoire (bevy_grimoire, bevy_grimoire_mapper)", "Cauldron (bevy_cauldron)"]
+    },
+    {
+      "thing": "editor's MCP server",
+      "canonical": "dark_factory_mcp",
+      "formerly": ["bevy_grimoire_mcp", "bevy_cauldron_mcp"]
+    },
+    {
+      "thing": "agent",
+      "canonical": "the Night Shift",
+      "formerly": ["the Familiar"]
+    },
+    {
+      "thing": "data a game loads",
+      "canonical": "blueprint (bevy_blueprint): unchanged",
+      "formerly": []
+    },
+    {
+      "thing": "book",
+      "canonical": "\"Dark Incorporated\" at https://dark-incorporated.github.io/",
+      "formerly": ["Bevy Coven"]
+    }
+  ],
+
+  "paths": [
+    ["bevy_grimoire", "bevy_dark_factory"],
+    ["with-grimoire", "with-dark-factory"],
+    ["grimoire", "dark-factory"],
+    ["cauldron", "dark-factory"],
+    ["coven", "dark-inc"]
+  ],
+
+  "identifiers": {
+    "cauldron": "dark_factory",
+    "grimoire": "dark_factory",
+    "coven": "dark_inc"
+  },
+
+  "text": [
+    ["org.bevy-coven.cauldron", "org.dark-incorporated.dark-factory"],
+    ["bevy-coven.github.io", "dark-incorporated.github.io"],
+    ["bevy-coven/bevy_blueprint", "dark-incorporated/bevy_dark_factory"],
+    ["bevy-coven/bevy_grimoire", "dark-incorporated/bevy_dark_factory"],
+    ["bevy-coven-art", "dark-inc-art"],
+    ["bevy-coven", "dark-incorporated"],
+    ["bevy_grimoire_mapper", "bevy_dark_factory"],
+    ["bevy_grimoire_mcp", "dark_factory_mcp"],
+    ["bevy_cauldron_mcp", "dark_factory_mcp"],
+    ["bevy_grimoire", "bevy_dark_factory"],
+    ["bevy_cauldron", "bevy_dark_factory"],
+    ["grimoire_state", "blueprint_state"],
+    ["grimoire_apply_operation", "blueprint_apply_operation"],
+    ["Bevy Coven", "Dark Incorporated"],
+    ["Part of the Coven", "Part of Dark Inc."],
+    ["Use it in Grimoire", "Use it in the Dark Factory"],
+    ["the Coven's", "Dark Inc.'s"],
+    ["the coven's", "Dark Inc.'s"],
+    ["the Coven", "Dark Inc."],
+    ["the coven", "Dark Inc."],
+    ["Coven", "Dark Inc."],
+    ["coven", "Dark Inc."],
+    ["the Cauldron", "the Dark Factory"],
+    ["Cauldron", "the Dark Factory"],
+    ["cauldron", "the Dark Factory"],
+    ["Grimoire's", "the Dark Factory's"],
+    ["Grimoire", "the Dark Factory"],
+    ["grimoire", "the Dark Factory"],
+    ["The Familiar", "The Night Shift"],
+    ["the Familiar", "the Night Shift"]
+  ],
+
+  "post": [
+    ["the the Dark Factory", "the Dark Factory"],
+    ["The the Dark Factory", "The Dark Factory"],
+    ["Dark Inc\\.\\.", "Dark Inc."],
+    ["(^|[.!?]\\s+|^\\s*[-*|>]\\s*|^#+\\s*)the Dark Factory", "\\1The Dark Factory"]
+  ],
+
+  "labels": [
+    ["consumer:bevy_grimoire", "consumer:bevy_dark_factory"]
+  ],
+
+  "forbidden": [
+    "bevy-coven",
+    "\\b[Cc]oven\\b",
+    "[Gg]rimoire",
+    "[Cc]auldron",
+    "\\b[Tt]he Familiar\\b"
+  ]
+}

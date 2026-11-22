@@ -18,7 +18,9 @@ Set up a machine first: one clone per repository at `~/dark-incorporated/<repo>`
 
 ## Docs
 
-A change a user can see updates the README and `docs/` in the same pull request, following [DOCUMENTATION.md](DOCUMENTATION.md). A feature is not done until its README line and, if it is visible, its GIF exist.
+A change a user can see updates the README and `docs/` in the same pull request, following the org's [DOCUMENTATION.md](DOCUMENTATION.md) for structure and checks and its [STYLE.md](STYLE.md) for names, voice and art. A feature is not done until its README line and, if it is visible, its GIF exist.
+
+Each repository's root `DOCUMENTATION.md` holds that repository's own facts, terms and recorded exceptions; it is rendered from the org template and never restates an org rule.
 
 ## Licence
 

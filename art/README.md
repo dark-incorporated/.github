@@ -107,6 +107,20 @@ lit by two lamps, with one wall casting a hard shadow. Both are drawn in
 `night_city`, use at most 16 colours, and are captioned "schematic" in the crate
 README because they show what the crate does, not a screenshot of it.
 
+The fix-loop walkthrough (`docs/fix-loop.md`) has three figures from one script,
+drawn over real captures in the `house` palette:
+
+```sh
+python3 art/fix_loop_figure.py                          # write art/fix-loop-*.png
+python3 art/fix_loop_figure.py --out /tmp/check --check # measure them instead
+```
+
+`editor` boxes five things on a capture of the editor, `proof` shows one fix's
+before and after, and `flow` is a schematic. The captures are in
+`art/sources/`, and the script's docstring says where each came from. `--check`
+fails on a colour outside the subset, a label or leader over the interface,
+sources that disagree, or a figure that differs from the committed one.
+
 ## Formerly
 
 Before 2026-11-21 this directory held two earlier sets, both kept under

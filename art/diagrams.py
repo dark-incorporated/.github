@@ -97,30 +97,34 @@ GLYPHS: dict[str, tuple[str, ...]] = {
     "/": ("....#", "....#", "...#.", "..#..", ".#...", "#....", "#...."),
     "$": ("..#..", ".####", "#.#..", ".###.", "..#.#", "####.", "..#.."),
     ":": (".....", ".##..", ".##..", ".....", ".##..", ".##..", "....."),
+    "+": (".....", "..#..", "..#..", "#####", "..#..", "..#..", "....."),
 }
 GLYPH_W = 5
 GLYPH_H = 7
 GLYPH_GAP = 1
 
 
-def load_subset() -> dict[str, tuple[int, int, int]]:
+def load_subset(subset: str = SUBSET) -> dict[str, tuple[int, int, int]]:
     data = json.loads(PALETTE_FILE.read_text())
     colours = {}
-    for entry in data["subsets"][SUBSET]:
+    for entry in data["subsets"][subset]:
         digits = str(entry).lstrip("#").upper()
         colours[digits] = tuple(int(digits[i : i + 2], 16) for i in (0, 2, 4))
     return colours
 
 
 class Canvas:
-    def __init__(self, width: int, height: int, colours: dict[str, tuple[int, int, int]]) -> None:
+    def __init__(
+        self, width: int, height: int, colours: dict[str, tuple[int, int, int]], subset: str = SUBSET
+    ) -> None:
         self.image = Image.new("RGB", (width, height), colours["000000"])
         self.draw = ImageDraw.Draw(self.image)
         self._colours = colours
+        self._subset = subset
 
     def colour(self, name: str) -> tuple[int, int, int]:
         if name not in self._colours:
-            raise SystemExit(f"{name} is not in the {SUBSET} subset")
+            raise SystemExit(f"{name} is not in the {self._subset} subset")
         return self._colours[name]
 
     def rect(self, box: tuple[int, int, int, int], name: str, width: int = 1) -> None:

@@ -13,6 +13,7 @@ Everything that spans more than one repository lives here, in [`dark-incorporate
 | Names, voice, the palette and the art | [`../STYLE.md`](../STYLE.md) |
 | How to contribute, file issues, request a consumer change | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
 | Where repositories and worktrees live on a machine | [`WORKSPACE.md`](WORKSPACE.md) |
+| How a person and an agent fix the editor quickly: ask, look, edit, prove, ship | [`fix-loop.md`](fix-loop.md) |
 | Research, measurements and decisions behind a design | [`research/`](research/) |
 | One crate's API and its user guide | that crate's `docs/guide/`, published to the book |
 

@@ -39,6 +39,7 @@ Dark Inc. builds an agent-first game editor and the Bevy runtime crates around i
 - [How Dark Inc. writes code](https://github.com/dark-incorporated/.github/blob/main/docs/STYLE.md): naming, the machine plate, dependencies, layout, Rust, tests and shipping.
 - [How every crate is documented](https://github.com/dark-incorporated/.github/blob/main/DOCUMENTATION.md): the document set, the README order, the checks and the review rubric.
 - [Names, voice, the palette and the art](https://github.com/dark-incorporated/.github/blob/main/STYLE.md): the canonical names, the EGA palette, the motif and the art pipeline.
+- [How a person and an agent fix the editor](https://github.com/dark-incorporated/.github/blob/main/docs/fix-loop.md): the fix loop, ask, look, edit, prove and ship, with its measured times and its error messages.
 - [Contributing](https://github.com/dark-incorporated/.github/blob/main/CONTRIBUTING.md).
 
 New machine? Set it up with [the workspace guide](https://github.com/dark-incorporated/.github/blob/main/docs/WORKSPACE.md).

@@ -25,6 +25,13 @@ A document here that ends without a decision is a note, not research — say so 
 
 `<date>-<topic>.md`, e.g. `2026-11-02-engine-free-crate-names.md`. A topic that is revisited gets a new file with a new date that links the old one — the old file is not rewritten, because a record of what was believed is the thing worth keeping.
 
+## How research is run
+
+`/dark-inc-feature-research [--quick|--deep|--exhaustive] <subject | S-nnn>` researches one subject for the Dark Factory with the home-still corpus and the open web, and invents design ideas from it: it writes a findings-and-proposals document here and saves a cited synthesis in home-still.
+`/dark-inc-feature-backlog <doc>` adopts that document's recommended ideas: it files them as issues in the repositories that own the work, appends a `## Decision` to the document, updates `docs/EDITOR-DESIGN.md` (made on the first adoption) and the reference documents, and fixes the guidance they make stale across the family.
+Both commands live in [`.omp/commands/`](../../.omp/commands/), run from `~/dark-incorporated/.github`, and deliver through a worktree and a pull request.
+The owner's seed ideas live in [`ideas.md`](ideas.md).
+
 ## Papers already relied on
 
 These are cited by [`DOCUMENTATION.md`](../../DOCUMENTATION.md), and a new claim about how people read or trust a repository should extend that list rather than repeat it:
@@ -38,6 +45,7 @@ These are cited by [`DOCUMENTATION.md`](../../DOCUMENTATION.md), and a new claim
 
 ## Documents
 
+- [`ideas.md`](ideas.md): the owner's seed ideas, and which research and issues each led to.
 - [`2026-11-02-python-scripting.md`](2026-11-02-python-scripting.md): can the Coven script its crates in Python (Monty, RustPython, PyO3) without losing performance or determinism? **Shelved**: measured, but no concrete need yet. Harness in [`2026-11-02-python-scripting-spike/`](2026-11-02-python-scripting-spike/).
 - [`2026-11-02-game-editor-best-practices.md`](2026-11-02-game-editor-best-practices.md): what the little published guidance on game editors and agent interfaces says, compared with the Cauldron. **Findings only**; the home-still corpus has almost nothing on editors.
 

@@ -422,16 +422,18 @@ Every claim about the Dark Factory's code is read at `63ab4f724a`, not run.
 
 |#|Idea|Evidence|Novelty|Vision fit|Leverage|Cost|Sum|
 |---|---|---|---|---|---|---|---|
-|1|Turn stamp on every oplog line; real-time Cmd+Z|3|3|5|4|3|18|
-|2|One atomic undo of a set of ids|4|2|4|4|2|16|
-|3|Open the turn in history and card|3|3|4|3|2|15|
-|4|Standing: what the person took back|2|2|5|2|4|15|
-|5|Footprint derived from the recorded line|3|3|4|3|1|14|
-|6|`undo_ask`: the agent asks before taking a person's edit|2|4|4|2|2|14|
+|I1|Turn stamp on every oplog line; real-time Cmd+Z|3|3|5|4|3|18|
+|I2|One atomic undo of a set of ids|4|2|4|4|2|16|
+|I3|Open the turn in history and card|3|3|4|3|2|15|
+|I4|Standing: what the person took back|2|2|5|2|4|15|
+|I5|Footprint derived from the recorded line|3|3|4|3|1|14|
+|I6|`undo_ask`: the agent asks before taking a person's edit|2|4|4|2|2|14|
 
-Order of work: 1, then 2 (after a write-less commit), then 5; 3's display after 1 and its step undo after 2 and 5; 4 at any time, cheapest after 1; 6 after 2 and 5.
+Order of work: I1, then I2 (after a write-less commit), then I5; I3's display after I1 and its step undo after I2 and I5; I4 at any time, cheapest after I1; I6 after I2 and I5.
 
-### 1. Stamp the turn on every oplog line, keep Cmd+Z in real-time order, delete the reorder
+### I1. Stamp the turn on every oplog line, keep Cmd+Z in real-time order, delete the reorder
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** Departures 1, 2, 3 and 8: the stack learns of a turn only at hand-back, `group_turn` then lifts the turn above the person's interleaved edit, and that reorder is what refuses and orphans the turn's oldest members.
 
@@ -450,11 +452,17 @@ Order of work: 1, then 2 (after a write-less commit), then 5; 3's display after 
 nsgo-dev/game makes a kept turn one history command tagged as the agent's, but avoids interleaving by holding the turn in memory until Keep (reported).
 Not found: a turn id on each persistent log line as it is written, with the person's history left in real-time order.
 
+Prior art: [nsgo-dev/game #1011](https://github.com/nsgo-dev/game/issues/1011), [Roblox ChangeHistoryService](https://create.roblox.com/docs/reference/engine/classes/ChangeHistoryService), [Unity CollapseUndoOperations](https://docs.unity.com/en-us/engine/6000.6/script-reference/unityeditor/undo/collapseundooperations), [ue-mcp checkpoints](https://github.com/db-lyon/ue-mcp/blob/main/docs/checkpoints.md).
+
 **Test.** With real-time order a1, h1 (the person's), a2, a3 and a hand-back of a1–a3: Cmd+Z takes a2 and a3 together, then h1, then a1, and refuses nothing; every turn line carries one stamp; a hand-back citing an unstamped id is refused; the oplog query by route returns each undo.
 
 **Weakest point.** It fixes partiality, not actor scope: real-time order is the global stack human-peer studies rated lowest, so it does not settle the scope question below.
 
-### 2. One atomic undo of a set of ids, used by every walker
+**Critic.** Keep: the reorder is the root cause of the orphaned member, and the stamp is the only idea that makes the boundary visible during the turn; the Nuss citation the lens gave for real-time order was misapplied.
+
+### I2. One atomic undo of a set of ids, used by every walker
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** Departures 3 and 9: a group undo is partial in four walkers with two rules, and the agent's turn `dry_run` reports the full count whatever the blockers.
 
@@ -474,11 +482,17 @@ DistEdit's authors first wanted all-or-nothing and later shipped partial undo; t
 **Why new.** Privatrak and paper-lite ship a verdict per change but skip and report the rest, which is partial (reported); ue-mcp refuses a batch whole before it runs; godot-mcp's pending rollback is atomic.
 Not found: one atomic planner shared by the person's keys and the agent's tools, with the three outcomes as inputs.
 
+Prior art: [Privatrak](https://dev.to/quentin_wendegass/we-gave-our-mcp-server-an-undo-button-2mah), [paper-lite #56](https://github.com/rocketonthemoon/paper-lite/pull/56), [ue-mcp #1520](https://github.com/db-lyon/ue-mcp/pull/1520), [godot-mcp undo tools](https://github.com/tomyud1/godot-mcp/blob/main/mcp-server/src/tools/undo-tools.ts).
+
 **Test.** A property test over generated interleavings of person and agent operations: every undo of a set ends with all of it undone, or refused with the blueprint byte-identical, and `dry_run`'s table equals what the real undo then does.
 
 **Weakest point.** The write-less commit touches every operation's `commit`; without it the planner can judge only the first guard and must say it is conservative.
 
-### 3. Open the turn in the history panel and the hand-back card
+**Critic.** Keep, as the core: the raw ideas' `best_effort` and `all_or_nothing` modes became one operation with three inputs, the ghost preview's table and label and the replay oracle (as this test) were folded in, and the write-less commit is the cost.
+
+### I3. Open the turn in the history panel and the hand-back card
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** Departure 6: a grouped turn is one history row, "N changes" (`editor.rs:1257`), the card lists one bullet per operation (`present.rs:138-145`), and a person cannot see where their own edits fell inside the turn.
 
@@ -487,18 +501,24 @@ Aquamarine's participants' main request was grouping.
 
 **Sketch.**
 
-- Stage 1, display only, from idea 1's stamp: the history row is titled with the hand-back's summary and opens to plan steps (from the turn's last `plan_set`; a turn with no plan is one step) and their operations, with the person's own edits during the turn shown in place as "mine, during turn".
+- Stage 1, display only, from I1's stamp: the history row is titled with the hand-back's summary and opens to plan steps (from the turn's last `plan_set`; a turn with no plan is one step) and their operations, with the person's own edits during the turn shown in place as "mine, during turn".
 - Step status is computed from the log and never written back to `plan.yaml`.
-- Stage 2, after ideas 2 and 5: "Undo step" calls idea 2 with the step's ids, and a jump into the turn shows idea 2's table before it runs, because `jump` undoes every entry above the target, the person's included.
+- Stage 2, after I2 and I5: "Undo step" calls I2 with the step's ids, and a jump into the turn shows I2's table before it runs, because `jump` undoes every entry above the target, the person's included.
 
 **Why new.** Turn-level and per-change views ship (nsgo-dev/game's card, VS Code per change, Windsurf's revert to step, Cline per tool use, Replit milestones).
 Not found: the person's interleaved edits shown inside the agent's turn.
+
+Prior art: [nsgo-dev/game #1219](https://github.com/nsgo-dev/game/pull/1219), [VS Code review](https://code.visualstudio.com/docs/agents/run/review-code-edits), [Windsurf Cascade](https://docs.devin.ai/desktop/cascade.md), [Replit checkpoints](https://docs.replit.com/features/version-control/checkpoints-and-rollbacks.md).
 
 **Test.** After a turn with two plan steps and one interleaved person edit, the panel shows one turn row, two step rows and the person's edit marked, with counts equal to the oplog's; in stage 2, undoing step 1 takes exactly its ids or shows the blocker table.
 
 **Weakest point.** Plan steps are optional and agent-written, so the middle level is only as good as the agent's plan.
 
-### 4. Standing: the agent sees which of its changes a person took back
+**Critic.** Keep, in two stages: the display needs only I1's stamp, while step undo waits for I2 and I5; a status write-back to `plan.yaml` was cut as a second source of truth.
+
+### I4. Standing: the agent sees which of its changes a person took back
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** Departure 7: after a person's Cmd+Z the agent sees only a changed `undo_next`, and a later `blueprint_present` still lists the undone ids, because the card's steps are each cited id's logged result (`ops_brp.rs:4290-4294`).
 
@@ -506,17 +526,23 @@ Not found: the person's interleaved edits shown inside the agent's turn.
 
 **Sketch.**
 
-- One pure function over the oplog's chains, `standing(lines, ids)`, giving each id as in effect or undone, by whom and by which route (idea 1).
+- One pure function over the oplog's chains, `standing(lines, ids)`, giving each id as in effect or undone, by whom and by which route (I1).
 - `blueprint_state` reports it for the open turn's and the last presented turn's ids; `blueprint_present` leaves undone ids off the card and says so in its answer.
 - No per-session cursor, which would not survive an editor restart or several MCP servers, and no fence against re-sending, for which no source shows a need.
 
 **Why new.** nsgo-dev/game's read-only `turn_status` reports reverted changes to the agent (reported); here the same fact comes from the log both actors already share.
 
+Prior art: [nsgo-dev/game #1219](https://github.com/nsgo-dev/game/pull/1219), [cline responses.ts](https://github.com/cline/cline/blob/d92f9393acec3f7f6d8b2bdf59f2c7e1d23ccb87/apps/vscode/src/core/prompts/responses.ts).
+
 **Test.** A person undoes one of three agent operations; `blueprint_state` reports it undone by a person through Cmd+Z, and presenting all three ids shows two and names the third.
 
 **Weakest point.** The evidence that telling the agent changes its behaviour is from harnesses and one reported product.
 
-### 5. Footprint derived from the recorded line
+**Critic.** Keep, trimmed: one pure function instead of the same fact in three places with a per-session cursor, and no re-send fence.
+
+### I5. Footprint derived from the recorded line
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** Departure 4: the first guard refuses on any newer change anywhere on the map and names only the newest blocker, and `layout_accept`'s second-guard state is counts only (`ops.rs:1830-1845`), so any placement added or removed by anyone refuses the undo of a keep.
 
@@ -534,11 +560,17 @@ Not found: the person's interleaved edits shown inside the agent's turn.
 **Why new.** paper-lite compares field values (reported), ue-mcp refuses a file edited outside, s&box declares the objects an undo captures.
 Not found: declared footprints used to refuse an undo and name every blocker.
 
+Prior art: [paper-lite #56](https://github.com/rocketonthemoon/paper-lite/pull/56), [ue-mcp checkpoints](https://github.com/db-lyon/ue-mcp/blob/main/docs/checkpoints.md), [s&box undo](https://sbox.game/dev/doc/editor/undo-system).
+
 **Test.** A person's nudge of a lamp far from an agent's fence no longer blocks undoing the fence; nudging a piece the fence touched still does and names the nudge; an unlisted `plan_set` blocks nothing; false refusals on recorded interleavings fall.
 
 **Weakest point.** An under-declared footprint silently allows an overwrite, and the method lands on about 65 operations.
 
-### 6. `undo_ask`: the agent asks before taking a person's edit
+**Critic.** Keep, reframed: "unknown means whole map" and a migration default were cut as second paths, the declaration was unified with the existing second guard, and the incremental index was deferred until a slowness is measured.
+
+### I6. `undo_ask`: the agent asks before taking a person's edit
+
+**Recommended (owner, 2026-11-28).** Owner's annotation: none.
 
 **Problem.** The agent's undo by id may take a person's line (`ops.rs:9033-9040`), and `blueprint_run_command` with `edit.undo` presses the person's Cmd+Z (`ops_brp.rs:3636`) [INFERENCE, not run], a second door past #530's fence.
 
@@ -548,15 +580,19 @@ The Dark Factory already has the pattern in `note_ask`.
 **Sketch.**
 
 - An actor rule: the agent may not undo a person's line without an answered ask.
-- `undo_ask` puts a row in the Agent block, copied from `note_ask`, showing idea 2's table; the answer line declares an empty footprint (idea 5).
+- `undo_ask` puts a row in the Agent block, copied from `note_ask`, showing I2's table; the answer line declares an empty footprint (I5).
 - `edit.undo` from the agent goes through the same rule.
 - Measure first on the bench how often an agent tries it.
 
 **Why new.** Shipped tools refuse (the Dark Factory today), report a partial undo (paper-lite) or undo blindly (unity-mcp's `Undo.PerformUndo()`); none asks the person.
 
+Prior art: [paper-lite #56](https://github.com/rocketonthemoon/paper-lite/pull/56), [unity-mcp ManageEditor.cs](https://github.com/CoplayDev/unity-mcp/blob/19b66ecef4ac3a9be22a7a62ea21accb975c39e7/MCPForUnity/Editor/Tools/ManageEditor.cs), [MCP schema](https://modelcontextprotocol.io/specification/2025-06-18/schema).
+
 **Test.** The agent's undo by id of a person's placement waits for an ask and changes nothing; yes undoes it, no leaves it; `edit.undo` from the agent over a person's newest entry is fenced the same way.
 
 **Weakest point.** No source shows agents doing this, so its frequency is unknown.
+
+**Critic.** Keep, after I2 and I5, with the `edit.undo` door closed too; measure the frequency on the bench first.
 
 ## Dropped ideas
 
@@ -567,12 +603,12 @@ The Dark Factory already has the pattern in `note_ask`.
 |Regional Cmd+Z|The measured sources disagree for this setting (Seifried against Rasch), and it needs a setting choosing between two undo behaviours plus a second chord.|
 |"Another layout": regenerate around touched rows|A feature above undo grouping; Unreal's PCG ships manual edits that survive regeneration.|
 |Undo settles against the running game|The generic "was this write applied" problem of every write; `reload_files` already reports the game's verdict.|
-|Pending-review marks on the map|A review feature whose undo kernel is ideas 2 and 5; recording Keep as an oplog line would duplicate the ledger.|
+|Pending-review marks on the map|A review feature whose undo kernel is I2 and I5; recording Keep as an oplog line would duplicate the ledger.|
 |Approval guard on what Undo cannot give back|Approval gating, not undo grouping, and its dial is three modes.|
-|Ghost overlay of an undo on the map|A second rendering of idea 2's table; the table and the button label are kept in idea 2.|
-|Replay oracle as a runtime receipt|A second implementation of undo running beside the real one; kept as idea 2's property test.|
-|Keep carries a reproducible recipe|`rules_hash` is only ever written as `None` (`ops.rs:8849`) and the hash would miss the library; the laid and consumed row ids moved into idea 5.|
-|Turn ledger verdict per undo|Merged into idea 1: with a stamp and a route on each undo line it is a query, and a second store of the same fact is not needed.|
+|Ghost overlay of an undo on the map|A second rendering of I2's table; the table and the button label are kept in I2.|
+|Replay oracle as a runtime receipt|A second implementation of undo running beside the real one; kept as I2's property test.|
+|Keep carries a reproducible recipe|`rules_hash` is only ever written as `None` (`ops.rs:8849`) and the hash would miss the library; the laid and consumed row ids moved into I5.|
+|Turn ledger verdict per undo|Merged into I1: with a stamp and a route on each undo line it is a query, and a second store of the same fact is not needed.|
 
 ## Guidance this contradicts
 
@@ -592,20 +628,26 @@ Nothing below was edited by this run.
 
 ## Alternatives and what would decide them
 
-1. **Scope of the person's Cmd+Z: global (today), per actor, or regional.**
-   Among human peers, global undo was the least preferred (Nuss ≤25%, Seifried 22%), but Rasch found a shared stack best under close collaboration (n=32).
-   Decided by the Dark Factory's own data once idea 1 records routes: how often a person's Cmd+Z of an agent change is followed by a redo within a minute, the sign it took what they did not mean.
-2. **Atomic or partial.**
-   Idea 2 is atomic; DistEdit shipped partial because its users preferred it, and Privatrak and paper-lite skip and report.
-   Decided by counting, on the bench and in the ledger, how often a turn undo meets a blocker, and which of Azurite's three outcomes people pick when it does.
-3. **How to decide that an undo conflicts: declared footprints, values, or consequences.**
-   Idea 5 uses footprints; paper-lite compares values; the dropped consequence idea ran the map's checks.
-   Decided by replaying the same recorded interleavings through each test and comparing false refusals with missed overwrites.
-4. **Where the turn lives until Keep: live and stamped, or pending.**
-   Idea 1 keeps the agent's writes live and stamps them; nsgo-dev/game holds the turn pending and commits one step at Keep (reported).
-   Decided by reading nsgo-dev/game's code, and by whether people undo single agent edits before they answer (idea 1's routes will show it).
-5. **Whether the plan step is worth a middle level.**
-   Decided by the ledger's operations per turn (`OpenTurn.seen`, `turn_ledger.rs:432`): if most turns are a handful of operations, idea 3 needs only its turn and operation levels.
+- **I1, scope of the person's Cmd+Z: global (today), per actor, or regional.**
+  Among human peers global undo was the least preferred (Nuss ≤25%, Seifried 22%), but Rasch found a shared stack best under close collaboration (n=32).
+  Decided by the Dark Factory's own data once I1 records routes: how often a person's Cmd+Z of an agent change is followed by a redo within a minute, the sign it took what they did not mean.
+- **I1, where the turn lives until Keep: live and stamped, or pending.**
+  I1 keeps the agent's writes live and stamps them; nsgo-dev/game holds the turn pending and commits one step at Keep (reported).
+  Decided by reading nsgo-dev/game's code, and by whether people undo single agent edits before they answer, which I1's routes will show.
+- **I2, atomic or partial.**
+  I2 is atomic; DistEdit shipped partial because its users preferred it, and Privatrak and paper-lite skip and report.
+  Decided by counting, on the bench and in the ledger, how often a turn undo meets a blocker, and which of Azurite's three outcomes people pick when it does.
+- **I3, a plan-step middle level or none.**
+  Decided by the ledger's operations per turn (`OpenTurn.seen`, `turn_ledger.rs:432`): if most turns are a handful of operations, I3 needs only its turn and operation levels.
+- **I4, the agent pulls its standing or is told.**
+  I4 is read from `blueprint_state` and applied at `blueprint_present`; the alternative pushes each undo of an agent line into the agent's next answer, as Claude Code's post-restore reminder does (reported).
+  Decided on the bench by how often an agent acts on an id a person already undid under each design.
+- **I5, how to decide that an undo conflicts: declared footprints, values, or consequences.**
+  I5 uses footprints; paper-lite compares values; the dropped consequence idea ran the map's checks.
+  Decided by replaying the same recorded interleavings through each test and comparing false refusals with missed overwrites.
+- **I6, ask or refuse.**
+  The alternative extends #530's fence: the agent's undo by id of a person's line is refused outright.
+  Decided on the bench by how often an agent attempts it and, once I6 exists, how often the person answers yes; rare attempts or a rare yes favour the refusal.
 
 ## Method and limits
 
